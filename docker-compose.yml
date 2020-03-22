@@ -1,0 +1,14 @@
+version: '3'
+services:
+  game:
+    restart: always
+    container_name: pylti1p3-django-example
+    build: .
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./configs:/configs
+      - ./game:/game
+    working_dir: /game
+    ports:
+      - "9001:9001"
