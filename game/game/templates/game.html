@@ -24,7 +24,7 @@ var launchId = "{{ launch_id }}";
         <li><a href="{% url 'game-configure' launch_id=launch_id difficulty='hard' %}">Hard</a></li>
     </ul>
 </div>
-{% endif %}
+{% else %}
 <div id="game-screen">
     <div style="position:absolute;width:1000px;margin-left:-500px;left:50%; display:block">
         <div id="scoreboard" style="position:absolute; right:0; width:200px">
@@ -38,5 +38,6 @@ var launchId = "{{ launch_id }}";
         </canvas>
     </div>
 </div>
+{% endif %}
 </body>
 </html>
