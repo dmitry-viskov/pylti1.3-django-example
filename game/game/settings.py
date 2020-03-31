@@ -62,6 +62,7 @@ WSGI_APPLICATION = 'game.wsgi.application'
 SESSION_COOKIE_NAME = 'sessionid'
 SESSION_COOKIE_SAMESITE = None  # should be set as 'None' for Django >= 3.1
 SESSION_COOKIE_SECURE = False  # should be True in case of HTTPS usage (production)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases

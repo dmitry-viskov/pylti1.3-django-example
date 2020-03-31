@@ -9,6 +9,7 @@
 <script type="text/javascript">
 var loginUniqueId = "{{ login_unique_id }}";
 var sameSite = "{{ same_site }}";
+var siteProtocol = "{{ site_protocol }}";
 
 var displayContent = function () {
      var resp = JSON.parse(this.responseText);
@@ -33,7 +34,7 @@ var displayContent = function () {
 var checkCookiesAllowed = function () {
     var currentTimestamp = (!Date.now ? +new Date() : Date.now());
     var newCookie = "test_cookie=" + currentTimestamp + "; path=/";
-    if (window.location.protocol === 'https:') {
+    if (siteProtocol === 'https') {
         if (sameSite !== '') {
             newCookie = newCookie + '; SameSite=' + sameSite;
         }

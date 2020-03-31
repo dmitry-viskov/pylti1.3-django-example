@@ -104,6 +104,7 @@ def login(request):
         return render(request, 'check_cookie.html', {
             'login_unique_id': login_unique_id,
             'same_site': getattr(settings, 'SESSION_COOKIE_SAMESITE'),
+            'site_protocol': 'https' if request.is_secure() else 'http',
             'page_title': PAGE_TITLE
         })
 
