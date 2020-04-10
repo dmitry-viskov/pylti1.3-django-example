@@ -181,7 +181,7 @@ def score(request, launch_id, earned_score, time_spent):
         return HttpResponseForbidden("Don't have grades!")
 
     sub = message_launch.get_launch_data().get('sub')
-    timestamp = datetime.datetime.utcnow().isoformat()
+    timestamp = datetime.datetime.utcnow().isoformat() + 'Z'
     earned_score = int(earned_score)
     time_spent = int(time_spent)
 

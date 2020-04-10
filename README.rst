@@ -9,14 +9,17 @@ First of all choose and configure test LTI 1.3 Platform. It may be:
 
 * `IMS Global test site`_
 * `Canvas LMS`_ (Detailed `instruction`_ how to setup Canvas as LTI 1.3 Platform is `here`_)
+* `Blackboard Learn`_ (`Documentation`_)
 
 .. _IMS Global test site: https://lti-ri.imsglobal.org
 .. _Canvas LMS: https://github.com/instructure/canvas-lms
 .. _instruction: https://github.com/dmitry-viskov/pylti1.3/wiki/Configure-Canvas-as-LTI-1.3-Platform
 .. _here: https://github.com/dmitry-viskov/pylti1.3/wiki/Configure-Canvas-as-LTI-1.3-Platform
+.. _Blackboard Learn: https://github.com/blackboard
+.. _Documentation: https://docs.blackboard.com/standards/PyLTI1p3WithBlackboardLearn.html
 
 The most simple way to check example is to use ``docker`` + ``docker-compose``.
-Change the necessary configs in the ``examples/configs/game.json`` (`here is instruction`_ how to generate your own public + private keys):
+Change the necessary configs in the ``configs/game.json`` (`here is instruction`_ how to generate your own public + private keys):
 
 .. _here is instruction: https://github.com/dmitry-viskov/pylti1.3/wiki/How-to-generate-JWT-RS256-key-and-JWKS
 

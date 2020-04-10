@@ -36,5 +36,14 @@
         "key_set": null,
         "private_key_file": "cert_suite_private.key",
         "deployment_ids": ["testdeploy"]
+    },
+    "https://blackboard.com": {
+        "client_id": "your client id",
+        "auth_login_url": "https://developer.blackboard.com/api/v1/gateway/oidcauth",
+        "auth_token_url": "https://developer.blackboard.com/api/v1/gateway/oauth2/jwttoken",
+        "key_set_url": "https://developer.blackboard.com/api/v1/management/applications/<your client id>/jwks.json",
+        "key_set": null,
+        "private_key_file": "private.key",
+        "deployment_ids": ["your deployment id"]
     }
 }
