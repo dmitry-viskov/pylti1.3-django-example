@@ -1,5 +1,6 @@
 {
-    "http://imsglobal.org": {
+    "http://imsglobal.org": [{
+        "default": true,
         "client_id": "pytest12345",
         "auth_login_url": "https://lti-ri.imsglobal.org/platforms/370/authorizations/new",
         "auth_token_url": "https://lti-ri.imsglobal.org/platforms/370/access_tokens",
@@ -17,33 +18,49 @@
             ]
         },
         "private_key_file": "private.key",
+        "public_key_file": "public.key",
         "deployment_ids": ["py1234"]
-    },
-    "https://canvas.instructure.com": {
-        "client_id": "10000000000004",
-        "auth_login_url": "http://canvas.docker/api/lti/authorize_redirect",
-        "auth_token_url": "http://canvas.docker/login/oauth2/token",
-        "key_set_url": "http://canvas.docker/api/lti/security/jwks",
+    }],
+    "https://canvas.instructure.com": [{
+        "default": true,
+        "client_id": "10000000000003",
+        "auth_login_url": "http://canvas.test/api/lti/authorize_redirect",
+        "auth_token_url": "http://canvas.test/login/oauth2/token",
+        "key_set_url": "http://canvas.test/api/lti/security/jwks",
         "key_set": null,
         "private_key_file": "private.key",
-        "deployment_ids": ["6:8865aa05b4b79b64a91a86042e43af5ea8ae79eb"]
-    },
-    "ltiadvantagevalidator.imsglobal.org": {
+        "public_key_file": "public.key",
+        "deployment_ids": ["2:4dde05e8ca1973bcca9bffc13e1548820eee93a3"]
+    }, {
+        "client_id": "10000000000004",
+        "auth_login_url": "http://canvas.test/api/lti/authorize_redirect",
+        "auth_token_url": "http://canvas.test/login/oauth2/token",
+        "key_set_url": "http://canvas.test/api/lti/security/jwks",
+        "key_set": null,
+        "private_key_file": "private.key",
+        "public_key_file": "public.key",
+        "deployment_ids": ["3:4dde05e8ca1973bcca9bffc13e1548820eee93a3"]
+    }],
+    "ltiadvantagevalidator.imsglobal.org": [{
+        "default": true,
         "client_id": "imstestuser",
         "auth_login_url": "https://ltiadvantagevalidator.imsglobal.org/ltitool/oidcauthurl.html",
         "auth_token_url": "https://oauth2server.imsglobal.org/oauth2server/authcodejwt",
         "key_set_url": "https://oauth2server.imsglobal.org/jwks",
         "key_set": null,
         "private_key_file": "cert_suite_private.key",
+        "public_key_file": null,
         "deployment_ids": ["testdeploy"]
-    },
-    "https://blackboard.com": {
+    }],
+    "https://blackboard.com": [{
+        "default": true,
         "client_id": "your client id",
         "auth_login_url": "https://developer.blackboard.com/api/v1/gateway/oidcauth",
         "auth_token_url": "https://developer.blackboard.com/api/v1/gateway/oauth2/jwttoken",
         "key_set_url": "https://developer.blackboard.com/api/v1/management/applications/<your client id>/jwks.json",
         "key_set": null,
         "private_key_file": "private.key",
+        "public_key_file": "public.key",
         "deployment_ids": ["your deployment id"]
-    }
+    }]
 }

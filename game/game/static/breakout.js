@@ -460,6 +460,10 @@ function mainGame() {
         xhttp.send();
     };
 
+    document.getElementById("refresh-btn").addEventListener("click", function() {
+        getScoreBoard();
+    });
+
     getScoreBoard();
 }
 

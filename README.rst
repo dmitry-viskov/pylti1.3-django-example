@@ -26,15 +26,21 @@ Change the necessary configs in the ``configs/game.json`` (`here is instruction`
 .. code-block:: javascript
 
     {
-        "<issuer>" : { // This will usually look something like 'http://example.com'
-            "client_id" : "<client_id>", // This is the id received in the 'aud' during a launch
+        "<issuer>" : [{ // This will usually look something like 'http://example.com'
+            "default": true, // this block will be used in case if client-id was not passed
+            "client_id" : "<client_id1>", // This is the id received in the 'aud' during a launch
             "auth_login_url" : "<auth_login_url>", // The platform's OIDC login endpoint
             "auth_token_url" : "<auth_token_url>", // The platform's service authorization endpoint
             "key_set_url" : "<key_set_url>", // The platform's JWKS endpoint
             "key_set": null, // in case if platform's JWKS endpoint somehow unavailable you may paste JWKS here
             "private_key_file" : "<path_to_private_key>", // Relative path to the tool's private key
+            "public_key_file": "<path_to_public_key>", // Relative path to the tool's public key
             "deployment_ids" : ["<deployment_id>"] // The deployment_id passed by the platform during launch
-        }
+        }, {
+            "default": false,
+            "client_id" : "<client_id2>",
+            ...
+        }]
     }
 
 and execute:
@@ -59,3 +65,4 @@ Now there is game example tool you can launch into on the port 9001:
 
     OIDC Login URL: http://127.0.0.1:9001/login/
     LTI Launch URL: http://127.0.0.1:9001/launch/
+    JWKS URL: http://127.0.0.1:9001/jwks/?iss=https%3A%2F%2Fcanvas.instructure.com
