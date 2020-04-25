@@ -2,7 +2,6 @@ import datetime
 import os
 import pprint
 
-from urllib.parse import unquote
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.shortcuts import render
@@ -13,6 +12,7 @@ from pylti1p3.deep_link_resource import DeepLinkResource
 from pylti1p3.grade import Grade
 from pylti1p3.lineitem import LineItem
 from pylti1p3.tool_config import ToolConfJsonFile
+from pylti1p3.registration import Registration
 
 
 PAGE_TITLE = 'Game Example'
@@ -36,6 +36,15 @@ class ExtendedDjangoMessageLaunch(DjangoMessageLaunch):
 
 def get_lti_config_path():
     return os.path.join(settings.BASE_DIR, '..', 'configs', 'game.json')
+
+
+def get_jwk_from_public_key(key_name):
+    key_path = os.path.join(settings.BASE_DIR, '..', 'configs', key_name)
+    f = open(key_path, 'r')
+    key_content = f.read()
+    jwk = Registration.get_jwk(key_content)
+    f.close()
+    return jwk
 
 
 def get_launch_data_storage():
@@ -84,13 +93,12 @@ def launch(request):
 
 
 def get_jwks(request):
-    iss = request.GET.get('iss')
-    if not iss:
-        return JsonResponse({'error': "iss was not passed"})
-    iss = unquote(iss)
-    tool_conf = ToolConfJsonFile(get_lti_config_path())
-    data = tool_conf.get_jwks(iss)
-    return JsonResponse(data, safe=False)
+    result_keys = []
+    public_keys = ['public.key', 'public2.key']
+    for key in public_keys:
+        jwk = get_jwk_from_public_key(key)
+        result_keys.append(jwk)
+    return JsonResponse({'keys': result_keys}, safe=False)
 
 
 def configure(request, launch_id, difficulty):
@@ -119,6 +127,8 @@ def score(request, launch_id, earned_score, time_spent):
     launch_data_storage = get_launch_data_storage()
     message_launch = ExtendedDjangoMessageLaunch.from_cache(launch_id, request, tool_conf,
                                                             launch_data_storage=launch_data_storage)
+    resource_link_id = message_launch.get_launch_data() \
+        .get('https://purl.imsglobal.org/spec/lti/claim/resource_link', {}).get('id')
 
     if not message_launch.has_ags():
         return HttpResponseForbidden("Don't have grades!")
@@ -141,6 +151,8 @@ def score(request, launch_id, earned_score, time_spent):
     sc_line_item.set_tag('score')\
         .set_score_maximum(100)\
         .set_label('Score')
+    if resource_link_id:
+        sc_line_item.set_resource_id(resource_link_id)
 
     grades.put_grade(sc, sc_line_item)
 
@@ -156,6 +168,8 @@ def score(request, launch_id, earned_score, time_spent):
     tm_line_item.set_tag('time')\
         .set_score_maximum(999)\
         .set_label('Time Taken')
+    if resource_link_id:
+        tm_line_item.set_resource_id(resource_link_id)
 
     result = grades.put_grade(tm, tm_line_item)
 
@@ -167,6 +181,8 @@ def scoreboard(request, launch_id):
     launch_data_storage = get_launch_data_storage()
     message_launch = ExtendedDjangoMessageLaunch.from_cache(launch_id, request, tool_conf,
                                                             launch_data_storage=launch_data_storage)
+    resource_link_id = message_launch.get_launch_data() \
+        .get('https://purl.imsglobal.org/spec/lti/claim/resource_link', {}).get('id')
 
     if not message_launch.has_nrps():
         return HttpResponseForbidden("Don't have names and roles!")
@@ -180,12 +196,18 @@ def scoreboard(request, launch_id):
     score_line_item.set_tag('score') \
         .set_score_maximum(100) \
         .set_label('Score')
+    if resource_link_id:
+        score_line_item.set_resource_id(resource_link_id)
+
     scores = ags.get_grades(score_line_item)
 
     time_line_item = LineItem()
     time_line_item.set_tag('time') \
         .set_score_maximum(999) \
         .set_label('Time Taken')
+    if resource_link_id:
+        time_line_item.set_resource_id(resource_link_id)
+
     times = ags.get_grades(time_line_item)
 
     members = message_launch.get_nrps().get_members()
