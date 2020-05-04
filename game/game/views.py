@@ -27,7 +27,7 @@ class ExtendedDjangoMessageLaunch(DjangoMessageLaunch):
         Because of this in case of iss == http://imsglobal.org just skip nonce validation.
 
         """
-        iss = self._get_iss()
+        iss = self.get_iss()
         deep_link_launch = self.is_deep_link_launch()
         if iss == "http://imsglobal.org" and deep_link_launch:
             return self
@@ -36,6 +36,11 @@ class ExtendedDjangoMessageLaunch(DjangoMessageLaunch):
 
 def get_lti_config_path():
     return os.path.join(settings.BASE_DIR, '..', 'configs', 'game.json')
+
+
+def get_tool_conf():
+    tool_conf = ToolConfJsonFile(get_lti_config_path())
+    return tool_conf
 
 
 def get_jwk_from_public_key(key_name):
@@ -59,7 +64,7 @@ def get_launch_url(request):
 
 
 def login(request):
-    tool_conf = ToolConfJsonFile(get_lti_config_path())
+    tool_conf = get_tool_conf()
     launch_data_storage = get_launch_data_storage()
 
     oidc_login = DjangoOIDCLogin(request, tool_conf, launch_data_storage=launch_data_storage)
@@ -71,7 +76,7 @@ def login(request):
 
 @require_POST
 def launch(request):
-    tool_conf = ToolConfJsonFile(get_lti_config_path())
+    tool_conf = get_tool_conf()
     launch_data_storage = get_launch_data_storage()
     message_launch = ExtendedDjangoMessageLaunch(request, tool_conf, launch_data_storage=launch_data_storage)
     message_launch_data = message_launch.get_launch_data()
@@ -93,16 +98,12 @@ def launch(request):
 
 
 def get_jwks(request):
-    result_keys = []
-    public_keys = ['public.key', 'public2.key']
-    for key in public_keys:
-        jwk = get_jwk_from_public_key(key)
-        result_keys.append(jwk)
-    return JsonResponse({'keys': result_keys}, safe=False)
+    tool_conf = get_tool_conf()
+    return JsonResponse(tool_conf.get_jwks(), safe=False)
 
 
 def configure(request, launch_id, difficulty):
-    tool_conf = ToolConfJsonFile(get_lti_config_path())
+    tool_conf = get_tool_conf()
     launch_data_storage = get_launch_data_storage()
     message_launch = ExtendedDjangoMessageLaunch.from_cache(launch_id, request, tool_conf,
                                                             launch_data_storage=launch_data_storage)
@@ -123,7 +124,7 @@ def configure(request, launch_id, difficulty):
 
 @require_POST
 def score(request, launch_id, earned_score, time_spent):
-    tool_conf = ToolConfJsonFile(get_lti_config_path())
+    tool_conf = get_tool_conf()
     launch_data_storage = get_launch_data_storage()
     message_launch = ExtendedDjangoMessageLaunch.from_cache(launch_id, request, tool_conf,
                                                             launch_data_storage=launch_data_storage)
@@ -177,7 +178,7 @@ def score(request, launch_id, earned_score, time_spent):
 
 
 def scoreboard(request, launch_id):
-    tool_conf = ToolConfJsonFile(get_lti_config_path())
+    tool_conf = get_tool_conf()
     launch_data_storage = get_launch_data_storage()
     message_launch = ExtendedDjangoMessageLaunch.from_cache(launch_id, request, tool_conf,
                                                             launch_data_storage=launch_data_storage)
