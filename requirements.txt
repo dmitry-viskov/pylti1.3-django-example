@@ -1,4 +1,4 @@
 cryptography==3.2.1
-django==3.1.8
+django==3.1.13
 django-debug-toolbar==2.2.1
 PyLTI1p3==1.9.1
