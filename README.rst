@@ -16,7 +16,7 @@ First of all choose and configure test LTI 1.3 Platform. It may be:
 .. _instruction: https://github.com/dmitry-viskov/pylti1.3/wiki/Configure-Canvas-as-LTI-1.3-Platform
 .. _here: https://github.com/dmitry-viskov/pylti1.3/wiki/Configure-Canvas-as-LTI-1.3-Platform
 .. _Blackboard Learn: https://github.com/blackboard
-.. _Documentation: https://docs.blackboard.com/standards/lti/tutorials/py-lti-1p3.html
+.. _Documentation: https://docs.blackboard.com/lti/tutorials/py-lti-1p3
 
 The most simple way to check example is to use ``docker`` + ``docker-compose``.
 Change the necessary configs in the ``configs/game.json`` (`here is instruction`_ how to generate your own public + private keys):
