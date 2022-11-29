@@ -131,3 +131,6 @@ dmypy.json
 
 # Pycharm
 .idea
+
+# library symlink (for development)
+pylti1p3
