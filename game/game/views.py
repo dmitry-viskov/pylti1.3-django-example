@@ -139,40 +139,51 @@ def score(request, launch_id, earned_score, time_spent):
     earned_score = int(earned_score)
     time_spent = int(time_spent)
 
-    grades = message_launch.get_ags()
-    sc = Grade()
-    sc.set_score_given(earned_score)\
-        .set_score_maximum(100)\
-        .set_timestamp(timestamp)\
-        .set_activity_progress('Completed')\
-        .set_grading_progress('FullyGraded')\
-        .set_user_id(sub)
+    ags = message_launch.get_ags()
 
-    sc_line_item = LineItem()
-    sc_line_item.set_tag('score')\
-        .set_score_maximum(100)\
-        .set_label('Score')
-    if resource_link_id:
-        sc_line_item.set_resource_id(resource_link_id)
+    if ags.can_create_lineitem():
+        sc = Grade()
+        sc.set_score_given(earned_score)\
+            .set_score_maximum(100)\
+            .set_timestamp(timestamp)\
+            .set_activity_progress('Completed')\
+            .set_grading_progress('FullyGraded')\
+            .set_user_id(sub)
 
-    grades.put_grade(sc, sc_line_item)
+        sc_line_item = LineItem()
+        sc_line_item.set_tag('score')\
+            .set_score_maximum(100)\
+            .set_label('Score')
+        if resource_link_id:
+            sc_line_item.set_resource_id(resource_link_id)
 
-    tm = Grade()
-    tm.set_score_given(time_spent)\
-        .set_score_maximum(999)\
-        .set_timestamp(timestamp)\
-        .set_activity_progress('Completed')\
-        .set_grading_progress('FullyGraded')\
-        .set_user_id(sub)
+        ags.put_grade(sc, sc_line_item)
 
-    tm_line_item = LineItem()
-    tm_line_item.set_tag('time')\
-        .set_score_maximum(999)\
-        .set_label('Time Taken')
-    if resource_link_id:
-        tm_line_item.set_resource_id(resource_link_id)
+        tm = Grade()
+        tm.set_score_given(time_spent)\
+            .set_score_maximum(999)\
+            .set_timestamp(timestamp)\
+            .set_activity_progress('Completed')\
+            .set_grading_progress('FullyGraded')\
+            .set_user_id(sub)
 
-    result = grades.put_grade(tm, tm_line_item)
+        tm_line_item = LineItem()
+        tm_line_item.set_tag('time')\
+            .set_score_maximum(999)\
+            .set_label('Time Taken')
+        if resource_link_id:
+            tm_line_item.set_resource_id(resource_link_id)
+
+        result = ags.put_grade(tm, tm_line_item)
+    else:
+        sc = Grade()
+        sc.set_score_given(earned_score) \
+            .set_score_maximum(100) \
+            .set_timestamp(timestamp) \
+            .set_activity_progress('Completed') \
+            .set_grading_progress('FullyGraded') \
+            .set_user_id(sub)
+        result = ags.put_grade(sc)
 
     return JsonResponse({'success': True, 'result': result.get('body')})
 
@@ -193,33 +204,42 @@ def scoreboard(request, launch_id):
 
     ags = message_launch.get_ags()
 
-    score_line_item = LineItem()
-    score_line_item.set_tag('score') \
-        .set_score_maximum(100) \
-        .set_label('Score')
-    if resource_link_id:
-        score_line_item.set_resource_id(resource_link_id)
+    if ags.can_create_lineitem():
+        score_line_item = LineItem()
+        score_line_item.set_tag('score') \
+            .set_score_maximum(100) \
+            .set_label('Score')
+        if resource_link_id:
+            score_line_item.set_resource_id(resource_link_id)
 
-    scores = ags.get_grades(score_line_item)
+        score_line_item = ags.find_or_create_lineitem(score_line_item)
+        scores = ags.get_grades(score_line_item)
 
-    time_line_item = LineItem()
-    time_line_item.set_tag('time') \
-        .set_score_maximum(999) \
-        .set_label('Time Taken')
-    if resource_link_id:
-        time_line_item.set_resource_id(resource_link_id)
+        time_line_item = LineItem()
+        time_line_item.set_tag('time') \
+            .set_score_maximum(999) \
+            .set_label('Time Taken')
+        if resource_link_id:
+            time_line_item.set_resource_id(resource_link_id)
 
-    times = ags.get_grades(time_line_item)
+        time_line_item = ags.find_or_create_lineitem(time_line_item)
+        times = ags.get_grades(time_line_item)
+    else:
+        scores = ags.get_grades()
+        times = None
 
     members = message_launch.get_nrps().get_members()
     scoreboard_result = []
 
     for sc in scores:
         result = {'score': sc['resultScore']}
-        for tm in times:
-            if tm['userId'] == sc['userId']:
-                result['time'] = tm['resultScore']
-                break
+        if times is None:
+            result['time'] = 'Not set'
+        else:
+            for tm in times:
+                if tm['userId'] == sc['userId']:
+                    result['time'] = tm['resultScore']
+                    break
         for member in members:
             if member['user_id'] == sc['userId']:
                 result['name'] = member.get('name', 'Unknown')

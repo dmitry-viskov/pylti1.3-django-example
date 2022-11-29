@@ -74,5 +74,17 @@
         "private_key_file": "private2.key",
         "public_key_file": "public2.key",
         "deployment_ids": ["deployment-id"]
+    }],
+    "http://moodle.test": [{
+        "default": true,
+        "client_id": "LyRl2z2Ai4Vxgok",
+        "auth_login_url": "http://moodle.test/mod/lti/auth.php",
+        "auth_token_url": "http://moodle.test/mod/lti/token.php",
+        "auth_audience": null,
+        "key_set_url": "http://moodle.test/mod/lti/certs.php",
+        "key_set": null,
+        "private_key_file": "private.key",
+        "public_key_file": "public.key",
+        "deployment_ids": ["1"]
     }]
 }
