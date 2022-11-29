@@ -26,7 +26,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'game',
-    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -34,7 +33,6 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'game.urls'
@@ -61,6 +59,7 @@ WSGI_APPLICATION = 'game.wsgi.application'
 
 SESSION_COOKIE_NAME = 'sessionid'
 SESSION_COOKIE_SAMESITE = None  # should be set as 'None' for Django >= 3.1
+CSRF_COOKIE_SAMESITE = None
 SESSION_COOKIE_SECURE = False  # should be True in case of HTTPS usage (production)
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
