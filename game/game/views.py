@@ -31,7 +31,7 @@ class ExtendedDjangoMessageLaunch(DjangoMessageLaunch):
         deep_link_launch = self.is_deep_link_launch()
         if iss == "http://imsglobal.org" and deep_link_launch:
             return self
-        return super(ExtendedDjangoMessageLaunch, self).validate_nonce()
+        return super().validate_nonce()
 
 
 def get_lti_config_path():
