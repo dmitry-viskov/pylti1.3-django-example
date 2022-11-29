@@ -57,8 +57,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'game.wsgi.application'
 
 SESSION_COOKIE_NAME = 'pylti1p3-django-app-sessionid'
-SESSION_COOKIE_SAMESITE = 'None'
-CSRF_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = None
+CSRF_COOKIE_SAMESITE = None
 SESSION_COOKIE_SECURE = False  # should be True in case of HTTPS usage (production)
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
