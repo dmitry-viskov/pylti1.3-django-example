@@ -1,3 +1,2 @@
-cryptography==3.2.1
 django==4.1.2
 PyLTI1p3==2.0.0
