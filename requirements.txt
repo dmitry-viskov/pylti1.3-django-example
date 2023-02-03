@@ -1,2 +1,2 @@
-django==4.1.2
+django==4.1.6
 PyLTI1p3==2.0.0
